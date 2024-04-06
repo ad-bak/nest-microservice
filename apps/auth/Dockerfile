@@ -3,7 +3,11 @@ FROM node:alpine As development
 WORKDIR /usr/src/app
 
 COPY package.json ./
-COPY npm-lock.yaml ./
+COPY package-lock.json ./
+
+RUN cd apps/auth && npm install --legacy-peer-deps
+
+
 COPY tsconfig.json tsconfig.json
 COPY nest-cli.json nest-cli.json
 
@@ -13,6 +17,7 @@ COPY apps/auth apps/auth
 COPY libs libs
 
 RUN cd apps/auth && npm install
+
 
 RUN npm run build auth
 
@@ -24,7 +29,7 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 
 COPY package.json ./
-COPY npm-lock.yaml ./
+COPY package-lock.json ./
 
 RUN npm install --prod
 
